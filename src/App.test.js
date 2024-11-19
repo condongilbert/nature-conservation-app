@@ -1,8 +1,24 @@
-import { render, screen } from '@testing-library/react';
-import App from './App';
+import React, { useEffect, useState } from 'react';
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
-});
+function App() {
+  const [tasks, setTasks] = useState([]);
+
+  useEffect(() => {
+    fetch('/api/tasks')
+      .then((res) => res.json())
+      .then((data) => setTasks(data));
+  }, []);
+
+  return (
+    <div>
+      <h1>Nature Conservation Tasks</h1>
+      <ul>
+        {tasks.map((task) => (
+          <li key={task.id}>{task.task} - {task.points} points</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default App;
